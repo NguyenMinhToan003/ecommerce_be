@@ -1,7 +1,8 @@
 'use strict';
 const { Model } = require('sequelize');
+const group = require('../migrations/group');
 module.exports = (sequelize, DataTypes) => {
-	class User extends Model {
+	class Groups extends Model {
 		/**
 		 * Helper method for defining associations.
 		 * This method is not a part of Sequelize lifecycle.
@@ -9,25 +10,24 @@ module.exports = (sequelize, DataTypes) => {
 		 */
 		static associate(models) {
 			// define association here
-			User.belongsTo(models.Groups, {
+			Groups.hasMany(models.User, {
+				foreignKey: 'groupID',
+			});
+			Groups.belongsToMany(models.Roles, {
+				through: 'Group_Roles',
 				foreignKey: 'groupID',
 			});
 		}
 	}
-	User.init(
+	Groups.init(
 		{
 			name: DataTypes.STRING,
-			email: DataTypes.STRING,
-			address: DataTypes.STRING,
-			password: DataTypes.STRING,
-			groupID: DataTypes.INTEGER,
-			gender: DataTypes.STRING,
-			phone: DataTypes.STRING,
+			description: DataTypes.STRING,
 		},
 		{
 			sequelize,
-			modelName: 'User',
+			modelName: 'Groups',
 		}
 	);
-	return User;
+	return Groups;
 };
