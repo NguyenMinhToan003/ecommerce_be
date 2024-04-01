@@ -2,15 +2,15 @@ require('dotenv').config();
 import Express from 'express';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
-import connection from './configs/connectMysql2.js';
-import configViewEngine from './configs/viewEngine.js';
+import configViewEngine from './config/viewEngine.js';
 import initWebRouter from './router/web.js';
-
+import initApiRouter from './router/api.js';
+import cors from './config/cors.js';
 const app = Express();
-
 // CORS
+cors(app);
 // Connection Database
-() => connection();
+/// ORM: Object Relational Mapping
 // Config view engine
 configViewEngine(app);
 
@@ -23,6 +23,7 @@ app.use(cookieParser());
 
 // Router
 initWebRouter(app);
+initApiRouter(app);
 // 404 not found
 app.use((req, res) => {
 	return res.send('404 not found');
