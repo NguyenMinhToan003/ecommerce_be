@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
 		 */
 		static associate(models) {
 			// define association here
-			Groups.hasMany(models.User, {
+			Groups.hasMany(models.Users, {
 				foreignKey: 'groupID',
 			});
 			Groups.belongsToMany(models.Roles, {
