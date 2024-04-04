@@ -36,5 +36,8 @@ const login = async (req, res) => {
 		});
 	}
 };
+const addProduct = async (req, res) => {
+	console.log('add Product ', req.body);
+};
 
-module.exports = { signup, login };
+module.exports = { signup, login, addProduct };

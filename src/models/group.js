@@ -1,6 +1,6 @@
 'use strict';
 const { Model } = require('sequelize');
-const group = require('../migrations/group');
+
 module.exports = (sequelize, DataTypes) => {
 	class Groups extends Model {
 		/**

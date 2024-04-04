@@ -16,7 +16,7 @@ const createAccountService = async (data) => {
 	try {
 		const [user, created] = await db.Users.findOrCreate({
 			where: {
-				[Op.or]: [{ email: data.email }, { phone: data.phone }],
+				[Op.or]: [{ email: data.email }, { phone: +data.phone }],
 			},
 			defaults: {
 				name: data.name,
@@ -73,6 +73,11 @@ const loginService = async (data) => {
 				};
 			}
 		}
+		return {
+			EM: 'Account or password is invalid',
+			EC: 1,
+			DT: '',
+		};
 	} catch (error) {
 		console.log(error);
 		return {
