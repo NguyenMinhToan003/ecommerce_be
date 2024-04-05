@@ -2,8 +2,7 @@ import multer from 'multer';
 import path from 'path';
 const storeImageProduct = multer.diskStorage({
 	destination: (req, file, cb) => {
-		console.log(path.join(__dirname, 'assets/images/products'));
-		cb(null, path.join(__dirname, 'assets/images/products'));
+		cb(null, path.join(__dirname, '../assets/images/products'));
 	},
 
 	filename: (req, file, cb) => {
@@ -12,7 +11,7 @@ const storeImageProduct = multer.diskStorage({
 });
 const storeImageUser = multer.diskStorage({
 	destination: (req, file, cb) => {
-		cb(null, path.join(__dirname, 'assets/images/users'));
+		cb(null, path.join(__dirname, '../assets/images/users'));
 	},
 
 	filename: (req, file, cb) => {
