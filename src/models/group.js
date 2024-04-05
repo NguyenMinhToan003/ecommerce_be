@@ -1,6 +1,6 @@
 'use strict';
 const { Model } = require('sequelize');
-const group = require('../migrations/group');
+
 module.exports = (sequelize, DataTypes) => {
 	class Groups extends Model {
 		/**
@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
 		 */
 		static associate(models) {
 			// define association here
-			Groups.hasMany(models.User, {
+			Groups.hasMany(models.Users, {
 				foreignKey: 'groupID',
 			});
 			Groups.belongsToMany(models.Roles, {

@@ -2,7 +2,7 @@ require('dotenv').config();
 import Express from 'express';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
-import configViewEngine from './config/viewEngine.js';
+import configExpress from './config/configExpress.js';
 import initWebRouter from './router/web.js';
 import initApiRouter from './router/api.js';
 import cors from './config/cors.js';
@@ -11,8 +11,8 @@ const app = Express();
 cors(app);
 // Connection Database
 /// ORM: Object Relational Mapping
-// Config view engine
-configViewEngine(app);
+// Config
+configExpress(app);
 
 // use json
 app.use(bodyParser.json());
