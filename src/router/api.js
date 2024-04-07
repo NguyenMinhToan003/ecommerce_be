@@ -15,7 +15,7 @@ const initApiRouter = (app) => {
 	router.post('/addProduct', registerController.addProduct);
 	router.post(
 		'/uploadProduct',
-		uploadProduct.any('image', 5),
+		uploadProduct.any('files', 5),
 		productionController.upLoadProduction
 	);
 
