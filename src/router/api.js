@@ -18,7 +18,9 @@ const initApiRouter = (app) => {
 		uploadProduct.any('files', 5),
 		productionController.upLoadProduction
 	);
-
+	router.get('/getProduct', productionController.getProduction);
+	router.post('/deleteProduct', productionController.deleteProduction);
+	router.post('/updateProduct', productionController.updateProduction);
 	return app.use('/api/v1', router);
 };
 
