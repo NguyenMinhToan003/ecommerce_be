@@ -1,15 +1,19 @@
 import express from 'express';
 import registerController from '../controllers/registerController.js';
 import productionController from '../controllers/productionController.js';
+import jwtController from '../controllers/jwtController.js';
 import {
 	storeImageProduct,
 	storeImageUser,
 } from '../middlewares/storeImage.js';
 import multer from 'multer';
+import { checkJWTToken, checkPermission } from '../middlewares/jwtAction.js';
 const uploadProduct = multer({ storage: storeImageProduct });
 const uploadUser = multer({ storage: storeImageUser });
 const router = express.Router();
 const initApiRouter = (app) => {
+	router.all('*', checkJWTToken, checkPermission);
+	router.post('/checkToken', jwtController.accessToken);
 	router.post('/login', registerController.login);
 	router.post('/logout', registerController.logout);
 	router.post('/signup', registerController.signup);

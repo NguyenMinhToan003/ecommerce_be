@@ -22,6 +22,14 @@ const login = async (req, res) => {
 	try {
 		const data = req.body;
 		const user = await registerService.loginService(data);
+		if (user.EC === 0) {
+			const token = user.DT.token;
+			res.cookie('jwt', token, {
+				httpOnly: true,
+				secure: true,
+				maxAge: +process.env.JWT_EXPIRES_IN,
+			});
+		}
 		return res.status(200).json({
 			EM: user.EM,
 			EC: user.EC,

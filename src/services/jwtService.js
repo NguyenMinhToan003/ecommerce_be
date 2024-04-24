@@ -10,7 +10,6 @@ const getGroupWithRoleUser = async (idGroup) => {
 				through: { attributes: [] },
 			},
 		],
-		raw: false,
 	});
 	return roles ? roles : {};
 };

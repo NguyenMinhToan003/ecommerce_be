@@ -2,6 +2,7 @@ import db from '../models/index';
 import bcrypt from 'bcrypt';
 import { Op } from 'sequelize';
 import { getGroupWithRoleUser } from './jwtService';
+import { createJWT } from '../middlewares/jwtAction';
 
 const hashPassword = async (password) => {
 	const salt = await bcrypt.genSalt(10);
@@ -60,14 +61,25 @@ const loginService = async (data) => {
 
 		if (user) {
 			const isValid = await comparePassword(data.password, user.password);
-			const group = await getGroupWithRoleUser(user.groupID);
-			console.log(group);
-			user = { ...user, group: group };
 			if (isValid) {
+				const group = await getGroupWithRoleUser(user.groupID);
+				const dataUser = {
+					id: user.id,
+					name: user.name,
+					email: user.email,
+					phone: user.phone,
+					address: user.address,
+					avatar: user.avatar,
+					group: group,
+				};
+				const token = createJWT(dataUser);
 				return {
 					EM: 'Login successful',
 					EC: 0,
-					DT: user,
+					DT: {
+						user: dataUser,
+						token: token,
+					},
 				};
 			} else {
 				return {

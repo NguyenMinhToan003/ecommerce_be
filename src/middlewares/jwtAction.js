@@ -40,22 +40,12 @@ const verifyToken = (token) => {
 	}
 	return decoded;
 };
-const extractToken = (req) => {
-	if (
-		req.headers.authorization &&
-		req.headers.authorization.split(' ')[0] === 'Bearer'
-	) {
-		return req.headers.authorization.split(' ')[1];
-	}
-	return null;
-};
 
 const checkJWTToken = (req, res, next) => {
 	if (nonSecurePaths.includes(req.path)) return next();
 	let cookie = req.cookies;
-	let headerToken = extractToken(req);
-	if ((cookie && cookie.jwt) || headerToken) {
-		let token = cookie && cookie.jwt ? cookie.jwt : headerToken;
+	if (cookie && cookie.jwt) {
+		let token = cookie.jwt;
 		let decoded = verifyToken(token);
 		if (decoded) {
 			req.user = decoded;
@@ -76,10 +66,10 @@ const checkJWTToken = (req, res, next) => {
 	}
 };
 const checkPermission = (req, res, next) => {
-	if (nonSecurePaths.includes(req.path) || req.path === '/account')
+	if (nonSecurePaths.includes(req.path) || req.path === '/checkToken')
 		return next();
 	if (req.user) {
-		let role = req.user.groupWithRole.Roles;
+		let role = req.user.group.Roles;
 		let currentUrl = req.path;
 		if (!role)
 			return res.status(403).json({
@@ -93,7 +83,6 @@ const checkPermission = (req, res, next) => {
 			return res.status(403).json({
 				EC: -1,
 				EM: 'You dont Permission to access resource...',
-				role,
 				DT: '',
 			});
 	} else
