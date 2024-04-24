@@ -1,6 +1,7 @@
 import db from '../models/index';
 import bcrypt from 'bcrypt';
 import { Op } from 'sequelize';
+import { getGroupWithRoleUser } from './jwtService';
 
 const hashPassword = async (password) => {
 	const salt = await bcrypt.genSalt(10);
@@ -52,13 +53,16 @@ const createAccountService = async (data) => {
 };
 const loginService = async (data) => {
 	try {
-		const user = await db.Users.findOne({
+		let user = await db.Users.findOne({
 			where: { [Op.or]: [{ email: data.account }, { phone: data.account }] },
 			raw: true,
 		});
 
 		if (user) {
 			const isValid = await comparePassword(data.password, user.password);
+			const group = await getGroupWithRoleUser(user.groupID);
+			console.log(group);
+			user = { ...user, group: group };
 			if (isValid) {
 				return {
 					EM: 'Login successful',
@@ -87,4 +91,49 @@ const loginService = async (data) => {
 		};
 	}
 };
-module.exports = { createAccountService, loginService };
+const logoutService = async (idUser) => {
+	try {
+		const result = await db.Users.update(
+			{ logoutAt: new Date().getTime() },
+			{ where: { id: +idUser } }
+		);
+		return {
+			EM: result ? 'Logout successfully' : 'Logout failed',
+			EC: result ? 0 : 1,
+			DT: '',
+		};
+	} catch (error) {
+		console.log(error);
+		return res.status(500).json({
+			EM: 'ERROR from server',
+			EC: -1,
+			DT: '',
+		});
+	}
+};
+const updateAvatarService = async (id, urlImage) => {
+	try {
+		const result = await db.Users.update(
+			{ avatar: urlImage },
+			{ where: { id: +id } }
+		);
+		return {
+			EM: result ? 'Update avatar successfully' : 'Update avatar failed',
+			EC: result ? 0 : 1,
+			DT: '',
+		};
+	} catch (err) {
+		console.log(err);
+		return res.status(500).json({
+			EM: 'ERROR from server',
+			EC: -1,
+			DT: '',
+		});
+	}
+};
+module.exports = {
+	createAccountService,
+	loginService,
+	logoutService,
+	updateAvatarService,
+};

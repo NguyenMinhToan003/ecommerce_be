@@ -29,6 +29,12 @@ module.exports = {
 			phone: {
 				type: Sequelize.STRING,
 			},
+			avatar: {
+				type: Sequelize.STRING,
+			},
+			logoutAt: {
+				type: Sequelize.DATE,
+			},
 			createdAt: {
 				allowNull: false,
 				type: Sequelize.DATE,

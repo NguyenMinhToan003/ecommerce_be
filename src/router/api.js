@@ -11,8 +11,13 @@ const uploadUser = multer({ storage: storeImageUser });
 const router = express.Router();
 const initApiRouter = (app) => {
 	router.post('/login', registerController.login);
+	router.post('/logout', registerController.logout);
 	router.post('/signup', registerController.signup);
-	router.post('/addProduct', registerController.addProduct);
+	router.post(
+		'/updateAvatar',
+		uploadUser.single('avatar'),
+		registerController.updateAvatar
+	);
 	router.post(
 		'/uploadProduct',
 		uploadProduct.any('files', 5),
