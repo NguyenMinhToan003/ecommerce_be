@@ -46,7 +46,8 @@ const login = async (req, res) => {
 };
 const logout = async (req, res) => {
 	try {
-		const idUser = req.body.id;
+		const idUser = +req.body.id;
+		console.log(idUser);
 		const result = await registerService.logoutService(idUser);
 		if (result.EC === 0) res.clearCookie('jwt');
 		return res.status(200).json({

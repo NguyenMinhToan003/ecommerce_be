@@ -13,7 +13,7 @@ const uploadUser = multer({ storage: storeImageUser });
 const router = express.Router();
 const initApiRouter = (app) => {
 	router.all('*', checkJWTToken, checkPermission);
-	router.post('/checkToken', jwtController.accessToken);
+	router.post('/accessToken', jwtController.accessToken);
 	router.post('/login', registerController.login);
 	router.post('/logout', registerController.logout);
 	router.post('/signup', registerController.signup);

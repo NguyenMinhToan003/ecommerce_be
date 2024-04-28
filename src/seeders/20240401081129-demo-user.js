@@ -53,6 +53,16 @@ module.exports = {
 					password:
 						'$2b$10$edkoBpxCTQ7nrh08Ik1uh.q.xyZUs0qgxuTUKMPUam0H8kW2Bpp0i',
 				},
+				{
+					email: 'admin@gmail.com',
+					name: 'Nguyen Minh Toan',
+					gender: '0',
+					address: 'HCM city',
+					phone: 12345678,
+					groupId: 1,
+					password:
+						'$2b$10$liU6Cwlo3u4r4sBp/QparuYrp.cq5B51J8ioHuFjyVAM37hD2TqEq',
+				},
 			],
 			{}
 		);
