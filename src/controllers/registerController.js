@@ -4,6 +4,25 @@ const signup = async (req, res) => {
 	try {
 		const data = req.body;
 		const user = await registerService.createAccountService(data);
+		if (user.EC === 0) {
+			const sentMail = await registerService.autoSendEmail(
+				data.email,
+				'Sigup successfully with Ecommerce website',
+				`
+				<div>
+					<h1>Hi ${data.name}</h1>
+					<p>Thanks for signing up with Ecommerce website</p>
+					<p>Here is your account information:</p>
+					<p>Email: ${data.email}</p>
+					<p>Address: ${data.address}</p>
+					<p>Phone: ${data.phone}</p>
+					<p>Gender:${data.gender === 1 ? 'Nam' : 'Nu'}</p>
+					<p><a href=${process.env.URL_FRONTEND}>Visit Website</a></p>
+				</div>
+				`
+			);
+			console.log(sentMail);
+		}
 		return res.status(200).json({
 			EM: user.EM,
 			EC: user.EC,

@@ -1,8 +1,10 @@
+require('dotenv').config();
 import db from '../models/index';
 import bcrypt from 'bcrypt';
 import { Op } from 'sequelize';
 import { getGroupWithRoleUser } from './jwtService';
 import { createJWT } from '../middlewares/jwtAction';
+import nodemailer from 'nodemailer';
 
 const hashPassword = async (password) => {
 	const salt = await bcrypt.genSalt(10);
@@ -143,9 +145,41 @@ const updateAvatarService = async (id, urlImage) => {
 		});
 	}
 };
+const autoSendEmail = async (email, subject, content) => {
+	const transporter = nodemailer.createTransport({
+		service: 'gmail',
+		auth: {
+			user: process.env.GMAIL_USER,
+			pass: process.env.GMAIL_PASS,
+		},
+	});
+	const mailAction = {
+		from: 'Website Ecommerce ',
+		to: email,
+		subject: subject,
+		html: content,
+	};
+	try {
+		const result = await transporter.sendMail(mailAction);
+		return {
+			EM: 'Send email successfully',
+			EC: 0,
+			DT: result,
+		};
+	} catch (error) {
+		console.log(error);
+		return {
+			EM: 'Error while sending email',
+			EC: -1,
+			DT: '',
+		};
+	}
+};
+
 module.exports = {
 	createAccountService,
 	loginService,
 	logoutService,
 	updateAvatarService,
+	autoSendEmail,
 };

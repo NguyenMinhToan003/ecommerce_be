@@ -2,6 +2,7 @@ const accessToken = (req, res) => {
 	try {
 		const token = req.token;
 		const user = req.user;
+		console.log('Token', token);
 		return res.status(200).json({
 			EM: 'Access token successfully',
 			EC: 0,

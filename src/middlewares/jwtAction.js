@@ -1,24 +1,6 @@
 require('dotenv').config();
 import jwt from 'jsonwebtoken';
-const nonSecurePaths = [
-	'/login',
-	'/signup',
-	'/logout',
-	'/cart/load',
-	'/ebook/search',
-	// "/ebook/upload",
-	// "/ebook/upload",
-	// "/ebook/read",
-	// "/ebook/detail",
-	// "/role",
-	// "/role/read",
-	// "/role/create",
-	// "/role/update",
-	// "/role/delete",
-	// "/group/read",
-	// "/groupwithrole",
-	// "/groupwithrole/create",
-];
+const nonSecurePaths = ['/login', '/signup', '/logout'];
 
 const createJWT = (payload) => {
 	let token = null;
@@ -66,7 +48,7 @@ const checkJWTToken = (req, res, next) => {
 	}
 };
 const checkPermission = (req, res, next) => {
-	if (nonSecurePaths.includes(req.path) || req.path === '/checkToken')
+	if (nonSecurePaths.includes(req.path) || req.path === '/accessToken')
 		return next();
 	if (req.user) {
 		let role = req.user.group.Roles;
