@@ -2,6 +2,7 @@ import express from 'express';
 import registerController from '../controllers/registerController.js';
 import productionController from '../controllers/productionController.js';
 import jwtController from '../controllers/jwtController.js';
+import userController from '../controllers/userController.js';
 import {
 	storeImageProduct,
 	storeImageUser,
@@ -27,6 +28,7 @@ const initApiRouter = (app) => {
 		uploadProduct.any('files', 5),
 		productionController.upLoadProduction
 	);
+	router.get('/getListUser', userController.getListUser);
 	router.get('/getProduct', productionController.getProduction);
 	router.post('/deleteProduct', productionController.deleteProduction);
 	router.post('/updateProduct', productionController.updateProduction);

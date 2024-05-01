@@ -30,6 +30,7 @@ const createAccountService = async (data) => {
 				groupID: data.group,
 				gender: data.gender,
 				phone: data.phone,
+				avatar: 'http://localhost:4040/assets/images/default/avatardefault.png',
 			},
 		});
 		if (created) {
