@@ -40,13 +40,22 @@ const signup = async (req, res) => {
 const login = async (req, res) => {
 	try {
 		const data = req.body;
-		const user = await registerService.loginService(data);
+		const account = data.account;
+		const password = data.password;
+		const user = await registerService.loginService(account, password);
 		if (user.EC === 0) {
 			const token = user.DT.token;
+			const refreshtoken = user.DT.refreshtoken;
+			console.log(token, refreshtoken);
 			res.cookie('jwt', token, {
 				httpOnly: true,
 				secure: true,
 				maxAge: +process.env.JWT_EXPIRES_IN,
+			});
+			res.cookie('refreshToken', refreshtoken, {
+				httpOnly: true,
+				secure: true,
+				maxAge: +process.env.JWT_REFRESH_EXPIRES_IN,
 			});
 		}
 		return res.status(200).json({
@@ -68,7 +77,10 @@ const logout = async (req, res) => {
 		const idUser = +req.body.id;
 		console.log(idUser);
 		const result = await registerService.logoutService(idUser);
-		if (result.EC === 0) res.clearCookie('jwt');
+		if (result.EC === 0) {
+			res.clearCookie('refreshToken');
+			res.clearCookie('jwt');
+		}
 		return res.status(200).json({
 			EM: result.EM,
 			EC: result.EC,

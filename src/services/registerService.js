@@ -3,7 +3,7 @@ import db from '../models/index';
 import bcrypt from 'bcrypt';
 import { Op } from 'sequelize';
 import { getGroupWithRoleUser } from './jwtService';
-import { createJWT } from '../middlewares/jwtAction';
+import { createAccessJWT, createRefreshJWT } from '../middlewares/jwtAction';
 import nodemailer from 'nodemailer';
 
 const hashPassword = async (password) => {
@@ -55,15 +55,15 @@ const createAccountService = async (data) => {
 		};
 	}
 };
-const loginService = async (data) => {
+const loginService = async (account, password) => {
 	try {
 		let user = await db.Users.findOne({
-			where: { [Op.or]: [{ email: data.account }, { phone: data.account }] },
+			where: { [Op.or]: [{ email: account }, { phone: account }] },
 			raw: true,
 		});
 
 		if (user) {
-			const isValid = await comparePassword(data.password, user.password);
+			const isValid = await comparePassword(password, user.password);
 			if (isValid) {
 				const group = await getGroupWithRoleUser(user.groupID);
 				const dataUser = {
@@ -75,13 +75,15 @@ const loginService = async (data) => {
 					avatar: user.avatar,
 					group: group,
 				};
-				const token = createJWT(dataUser);
+				const token = createAccessJWT(dataUser);
+				const refreshtoken = createRefreshJWT(dataUser);
 				return {
 					EM: 'Login successful',
 					EC: 0,
 					DT: {
 						user: dataUser,
 						token: token,
+						refreshtoken: refreshtoken,
 					},
 				};
 			} else {

@@ -7,6 +7,7 @@ import {
 	storeImageProduct,
 	storeImageUser,
 } from '../middlewares/storeImage.js';
+import { refreshToken } from '../middlewares/jwtAction.js';
 import multer from 'multer';
 import { checkJWTToken, checkPermission } from '../middlewares/jwtAction.js';
 const uploadProduct = multer({ storage: storeImageProduct });
@@ -15,6 +16,7 @@ const router = express.Router();
 const initApiRouter = (app) => {
 	router.all('*', checkJWTToken, checkPermission);
 	router.post('/accessToken', jwtController.accessToken);
+	router.post('/refreshToken', refreshToken, jwtController.accessToken);
 	router.post('/login', registerController.login);
 	router.post('/logout', registerController.logout);
 	router.post('/signup', registerController.signup);

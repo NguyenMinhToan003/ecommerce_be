@@ -11,7 +11,7 @@ const getProduct = async ({ limit, page }) => {
 		const data = {
 			totalRows: count,
 			totalPage: totalPage,
-			book: rows,
+			record: rows,
 		};
 		return {
 			EM: `get product success ${totalPage} page with ${count} records`,

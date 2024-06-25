@@ -7,8 +7,10 @@ import {
 } from '../services/productService';
 const getProduction = async (req, res) => {
 	try {
-		const { limit, page } = req.query;
-		console.log('limit', limit, 'page', page);
+		let { limit, page } = req.query;
+		if (page === 0) page = 1;
+		if (limit === 0) limit = 10;
+
 		const result = await getProduct({ limit, page });
 		return res.status(200).json({
 			EM: result.EM,
@@ -29,7 +31,7 @@ const upLoadProduction = async (req, res) => {
 		files.forEach((item, index) => {
 			url = url + `${process.env.STORE_PRODUCT}${item.filename},`;
 		});
-		console.log(data.name);
+
 		data = { ...data, url: url };
 		const result = await upLoadtProduct(data);
 		return res.status(200).json({
