@@ -28,6 +28,15 @@ module.exports = {
 			order_price: {
 				type: Sequelize.FLOAT,
 			},
+			order_date: {
+				type: Sequelize.DATE,
+			},
+			order_color: {
+				type: Sequelize.STRING,
+			},
+			order_size: {
+				type: Sequelize.STRING,
+			},
 			order_status: {
 				type: Sequelize.BOOLEAN,
 			},

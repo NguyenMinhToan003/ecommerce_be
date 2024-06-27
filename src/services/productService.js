@@ -1,5 +1,5 @@
 import db from '../models';
-const getProduct = async ({ limit, page }) => {
+const getProductService = async ({ limit, page }) => {
 	try {
 		const offset = page ? (page - 1) * limit : 0;
 		const { count, rows } = await db.Products.findAndCountAll({
@@ -110,4 +110,9 @@ const updateProduct = async (product) => {
 		};
 	}
 };
-module.exports = { upLoadtProduct, getProduct, deleteProduct, updateProduct };
+module.exports = {
+	upLoadtProduct,
+	getProductService,
+	deleteProduct,
+	updateProduct,
+};

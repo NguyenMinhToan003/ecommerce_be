@@ -35,15 +35,16 @@ module.exports = {
 					name: 'Nguyen Minh Toan (admin)',
 					gender: false,
 					address: 'HCM city',
-					phone: '0375216157',
+					phone: '12345678',
 					groupId: 1,
 					password:
 						'$2b$10$liU6Cwlo3u4r4sBp/QparuYrp.cq5B51J8ioHuFjyVAM37hD2TqEq',
+					avatar:
+						'http://localhost:4040/assets/images/default/avatardefault.png',
 					createdAt: new Date(),
 					updatedAt: new Date(),
 				},
 				{
-					//id: Sequelize.fn('UUID'),
 					email: 'dev@gmail.com',
 					name: 'Nguyen Minh Toan (dev)',
 					gender: true,
@@ -52,6 +53,8 @@ module.exports = {
 					groupId: 2,
 					password:
 						'$2b$10$liU6Cwlo3u4r4sBp/QparuYrp.cq5B51J8ioHuFjyVAM37hD2TqEq',
+					avatar:
+						'http://localhost:4040/assets/images/default/avatardefault.png',
 					createdAt: new Date(),
 					updatedAt: new Date(),
 				},

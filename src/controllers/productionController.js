@@ -1,7 +1,7 @@
 require('dotenv').config();
 import {
 	upLoadtProduct,
-	getProduct,
+	getProductService,
 	deleteProduct,
 	updateProduct,
 } from '../services/productService';
@@ -11,7 +11,7 @@ const getProduction = async (req, res) => {
 		if (page === 0) page = 1;
 		if (limit === 0) limit = 10;
 
-		const result = await getProduct({ limit, page });
+		const result = await getProductService({ limit, page });
 		return res.status(200).json({
 			EM: result.EM,
 			EC: result.EC,
