@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
 			address: DataTypes.STRING,
 			password: DataTypes.STRING,
 			groupID: DataTypes.INTEGER,
-			gender: DataTypes.STRING,
+			gender: DataTypes.BOOLEAN,
 			phone: DataTypes.STRING,
 			avatar: DataTypes.STRING,
 			logoutAt: DataTypes.DATE,
@@ -34,5 +34,6 @@ module.exports = (sequelize, DataTypes) => {
 			modelName: 'Users',
 		}
 	);
+
 	return Users;
 };

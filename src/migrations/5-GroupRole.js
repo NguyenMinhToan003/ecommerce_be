@@ -9,10 +9,18 @@ module.exports = {
 				type: Sequelize.INTEGER,
 			},
 			roleID: {
-				type: Sequelize.STRING,
+				type: Sequelize.INTEGER,
+				references: {
+					model: 'Roles',
+					key: 'id',
+				},
 			},
 			groupID: {
-				type: Sequelize.STRING,
+				type: Sequelize.INTEGER,
+				references: {
+					model: 'Groups',
+					key: 'id',
+				},
 			},
 			createdAt: {
 				allowNull: false,

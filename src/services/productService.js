@@ -53,7 +53,7 @@ const upLoadtProduct = async (product) => {
 		console.log('>>>>>>> product ', product);
 		const result = await db.Products.create({
 			name: product.name,
-			price: product.price == -1 ? 0 : product.price,
+			price: product.price == -1 ? 0 : +product.price,
 			image: product.url,
 			detail: product.detail,
 			userID: product.userID,

@@ -3,10 +3,10 @@ module.exports = {
 	up: async (queryInterface, Sequelize) => {
 		await queryInterface.createTable('Users', {
 			id: {
+				type: Sequelize.UUID,
+				defaultValue: Sequelize.fn('UUID'),
 				allowNull: false,
-				autoIncrement: true,
 				primaryKey: true,
-				type: Sequelize.INTEGER,
 			},
 			name: {
 				type: Sequelize.STRING,
@@ -22,6 +22,10 @@ module.exports = {
 			},
 			groupID: {
 				type: Sequelize.INTEGER,
+				references: {
+					model: 'Groups',
+					key: 'id',
+				},
 			},
 			gender: {
 				type: Sequelize.STRING,

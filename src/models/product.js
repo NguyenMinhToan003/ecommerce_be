@@ -1,6 +1,6 @@
 'use strict';
 const { Model } = require('sequelize');
-const group = require('../migrations/group');
+
 module.exports = (sequelize, DataTypes) => {
 	class Products extends Model {
 		/**
@@ -13,19 +13,24 @@ module.exports = (sequelize, DataTypes) => {
 			Products.belongsTo(models.Users, {
 				foreignKey: 'userID',
 			});
+			Products.belongsTo(models.Catagories, {
+				foreignKey: 'catagoryID',
+			});
 		}
 	}
 	Products.init(
 		{
 			name: DataTypes.STRING,
-			star: DataTypes.STRING,
-			price: DataTypes.STRING,
+			star: DataTypes.FLOAT,
+			price: DataTypes.FLOAT,
 			size: DataTypes.STRING,
 			color: DataTypes.STRING,
 			detail: DataTypes.STRING,
-			quantity: DataTypes.STRING,
-			image: DataTypes.STRING,
-			userID: DataTypes.INTEGER,
+			quantity: DataTypes.INTEGER,
+			image: DataTypes.STRING(1000),
+			countDown: DataTypes.FLOAT,
+			userID: DataTypes.UUID,
+			catagoryID: DataTypes.INTEGER,
 		},
 		{
 			sequelize,
