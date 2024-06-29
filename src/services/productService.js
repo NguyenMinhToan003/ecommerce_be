@@ -117,9 +117,10 @@ const updateProduct = async (product) => {
 		};
 	}
 };
-const searchProductService = async (name, limit) => {
+const searchProductService = async (name, limit, page) => {
 	try {
-		console.log(limit);
+		let offset = (page - 1) * limit;
+		console.log(limit, page);
 		if (!name || name === '')
 			return { EM: 'Search product by name', EC: 0, DT: [] };
 		const { count, rows } = await db.Products.findAndCountAll({
@@ -128,8 +129,17 @@ const searchProductService = async (name, limit) => {
 					[Op.like]: `%${name}%`,
 				},
 			},
-			limit: limit ? limit : 10,
+			include: [
+				{
+					model: db.Users,
+					attributes: ['name'],
+				},
+			],
+			offset: +offset,
+			limit: limit ? +limit : 10,
+			order: [['id', 'DESC']],
 		});
+
 		return {
 			EM: `search product success with ${count} records`,
 			EC: 0,

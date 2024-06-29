@@ -76,8 +76,9 @@ const updateProduction = async (req, res) => {
 
 const searchProduction = async (req, res) => {
 	try {
-		const { name, limit } = req.query;
-		const result = await searchProductService(name, limit);
+		const { name, limit, page } = req.query;
+		console.log(name, limit, page);
+		const result = await searchProductService(name, limit, page);
 		return res.status(200).json({
 			EM: result.EM,
 			EC: result.EC,

@@ -76,7 +76,7 @@ const loginService = async (account, password) => {
 					group: group,
 				};
 				const token = createAccessJWT(dataUser);
-				const refreshtoken = createRefreshJWT(dataUser);
+				const refreshtoken = createRefreshJWT({ id: dataUser.id });
 				return {
 					EM: 'Login successful',
 					EC: 0,
