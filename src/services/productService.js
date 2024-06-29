@@ -1,8 +1,15 @@
+import { Op } from 'sequelize';
 import db from '../models';
-const getProduct = async ({ limit, page }) => {
+const getProductService = async ({ limit, page }) => {
 	try {
 		const offset = page ? (page - 1) * limit : 0;
 		const { count, rows } = await db.Products.findAndCountAll({
+			include: [
+				{
+					model: db.Users,
+					attributes: ['name'],
+				},
+			],
 			limit: +limit,
 			offset: offset,
 			order: [['id', 'DESC']],
@@ -11,7 +18,7 @@ const getProduct = async ({ limit, page }) => {
 		const data = {
 			totalRows: count,
 			totalPage: totalPage,
-			book: rows,
+			record: rows,
 		};
 		return {
 			EM: `get product success ${totalPage} page with ${count} records`,
@@ -53,7 +60,7 @@ const upLoadtProduct = async (product) => {
 		console.log('>>>>>>> product ', product);
 		const result = await db.Products.create({
 			name: product.name,
-			price: product.price == -1 ? 0 : product.price,
+			price: product.price == -1 ? 0 : +product.price,
 			image: product.url,
 			detail: product.detail,
 			userID: product.userID,
@@ -110,4 +117,37 @@ const updateProduct = async (product) => {
 		};
 	}
 };
-module.exports = { upLoadtProduct, getProduct, deleteProduct, updateProduct };
+const searchProductService = async (name, limit) => {
+	try {
+		console.log(limit);
+		if (!name || name === '')
+			return { EM: 'Search product by name', EC: 0, DT: [] };
+		const { count, rows } = await db.Products.findAndCountAll({
+			where: {
+				name: {
+					[Op.like]: `%${name}%`,
+				},
+			},
+			limit: limit ? limit : 10,
+		});
+		return {
+			EM: `search product success with ${count} records`,
+			EC: 0,
+			DT: rows,
+		};
+	} catch (error) {
+		console.log(error);
+		return {
+			EM: 'ERROR from server',
+			EC: -1,
+			DT: '',
+		};
+	}
+};
+module.exports = {
+	upLoadtProduct,
+	getProductService,
+	deleteProduct,
+	updateProduct,
+	searchProductService,
+};

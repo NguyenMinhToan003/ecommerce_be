@@ -2,62 +2,7 @@
 
 module.exports = {
 	up: async (queryInterface, Sequelize) => {
-		/**
-		 * Add seed commands here.
-		 *
-		 * Example:
-		 * await queryInterface.bulkInsert('People', [{
-		 *   name: 'John Doe',
-		 *   isBetaMember: false
-		 * }], {});
-		 */
-
-		// Thêm dữ liệu vào bảng 'datausers'
-		await queryInterface.bulkInsert(
-			'Users',
-			[
-				{
-					email: 'John Doe',
-					password:
-						'$2b$10$weFM2ydWu1TZeo25nLIRyeL7fJ.IzJSRg07OmrA1luB6aM1Tv8z2S',
-					name: 'test 1',
-					gender: 'male',
-					address: 'HCM city',
-					phone: 1,
-				},
-				{
-					email: 'John Doe2',
-					password:
-						'$2b$10$weFM2ydWu1TZeo25nLIRyeL7fJ.IzJSRg07OmrA1luB6aM1Tv8z2S',
-					name: 'test 2',
-					gender: 'male',
-					address: 'HCM city',
-					phone: 1,
-				},
-				{
-					email: 'John Doe3',
-					password:
-						'$2b$10$weFM2ydWu1TZeo25nLIRyeL7fJ.IzJSRg07OmrA1luB6aM1Tv8z2S',
-					name: 'test 3',
-					gender: 'male',
-					address: 'HCM city',
-					phone: 1,
-				},
-				{
-					email: '123',
-					name: 'Toan Admin',
-					gender: 'male',
-					address: 'HCM city',
-					phone: 123,
-					groupId: 1,
-					password:
-						'$2b$10$edkoBpxCTQ7nrh08Ik1uh.q.xyZUs0qgxuTUKMPUam0H8kW2Bpp0i',
-				},
-			],
-			{}
-		);
-
-		// Thêm dữ liệu vào bảng 'groups'
+		// Adding data to 'groups' table
 		await queryInterface.bulkInsert(
 			'Groups',
 			[
@@ -81,7 +26,43 @@ module.exports = {
 			{}
 		);
 
-		// Thêm dữ liệu vào bảng 'roles'
+		// Adjusted seed data for Users
+		await queryInterface.bulkInsert(
+			'Users',
+			[
+				{
+					email: 'admin@gmail.com',
+					name: 'Nguyen Minh Toan (admin)',
+					gender: false,
+					address: 'HCM city',
+					phone: '12345678',
+					groupId: 1,
+					password:
+						'$2b$10$liU6Cwlo3u4r4sBp/QparuYrp.cq5B51J8ioHuFjyVAM37hD2TqEq',
+					avatar:
+						'http://localhost:4040/assets/images/default/avatardefault.png',
+					createdAt: new Date(),
+					updatedAt: new Date(),
+				},
+				{
+					email: 'dev@gmail.com',
+					name: 'Nguyen Minh Toan (dev)',
+					gender: true,
+					address: 'HCM city',
+					phone: '0375216147',
+					groupId: 2,
+					password:
+						'$2b$10$liU6Cwlo3u4r4sBp/QparuYrp.cq5B51J8ioHuFjyVAM37hD2TqEq',
+					avatar:
+						'http://localhost:4040/assets/images/default/avatardefault.png',
+					createdAt: new Date(),
+					updatedAt: new Date(),
+				},
+			],
+			{}
+		);
+
+		// Adding data to 'roles' table
 		await queryInterface.bulkInsert(
 			'Roles',
 			[
@@ -165,7 +146,7 @@ module.exports = {
 			{}
 		);
 
-		// Thêm dữ liệu vào bảng 'group_roles'
+		// Adding data to 'group_roles' table
 		await queryInterface.bulkInsert(
 			'Group_Roles',
 			[
@@ -249,7 +230,7 @@ module.exports = {
 					groupId: 1,
 					roleId: 20,
 				},
-				// Thêm các dòng dữ liệu khác tại đây...
+				// Add other data rows here...
 			],
 			{}
 		);

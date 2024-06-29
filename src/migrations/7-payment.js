@@ -1,17 +1,27 @@
 'use strict';
 module.exports = {
 	up: async (queryInterface, Sequelize) => {
-		await queryInterface.createTable('Group_Roles', {
+		await queryInterface.createTable('Payments', {
 			id: {
+				type: Sequelize.UUID,
+				defaultValue: Sequelize.fn('UUID'),
 				allowNull: false,
-				autoIncrement: true,
 				primaryKey: true,
-				type: Sequelize.INTEGER,
 			},
-			roleID: {
+			ShippingID: {
+				type: Sequelize.UUID,
+				references: {
+					model: 'Shippings',
+					key: 'id',
+				},
+			},
+			amount: {
+				type: Sequelize.FLOAT,
+			},
+			payment_type: {
 				type: Sequelize.STRING,
 			},
-			groupID: {
+			payment_status: {
 				type: Sequelize.STRING,
 			},
 			createdAt: {
@@ -25,6 +35,6 @@ module.exports = {
 		});
 	},
 	down: async (queryInterface, Sequelize) => {
-		await queryInterface.dropTable('Group_Roles');
+		await queryInterface.dropTable('Payments');
 	},
 };
