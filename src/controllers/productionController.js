@@ -4,6 +4,7 @@ import {
 	getProductService,
 	deleteProduct,
 	updateProduct,
+	searchProductService,
 } from '../services/productService';
 const getProduction = async (req, res) => {
 	try {
@@ -73,9 +74,25 @@ const updateProduction = async (req, res) => {
 	}
 };
 
+const searchProduction = async (req, res) => {
+	try {
+		const { name, limit } = req.query;
+		const result = await searchProductService(name, limit);
+		return res.status(200).json({
+			EM: result.EM,
+			EC: result.EC,
+			DT: result.DT,
+		});
+	} catch (error) {
+		console.log(error);
+		return res.stastus(500).json({ EM: 'ERROR from server', EC: -1, DT: '' });
+	}
+};
+
 module.exports = {
 	upLoadProduction,
 	getProduction,
 	deleteProduction,
 	updateProduction,
+	searchProduction,
 };

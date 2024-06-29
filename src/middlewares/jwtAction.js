@@ -10,6 +10,7 @@ const nonSecurePaths = [
 	'/uploadProduct',
 	'/getProduct',
 	'/refreshToken',
+	'/search',
 ];
 
 const createAccessJWT = (payload) => {

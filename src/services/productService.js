@@ -1,8 +1,15 @@
+import { Op } from 'sequelize';
 import db from '../models';
 const getProductService = async ({ limit, page }) => {
 	try {
 		const offset = page ? (page - 1) * limit : 0;
 		const { count, rows } = await db.Products.findAndCountAll({
+			include: [
+				{
+					model: db.Users,
+					attributes: ['name'],
+				},
+			],
 			limit: +limit,
 			offset: offset,
 			order: [['id', 'DESC']],
@@ -110,9 +117,37 @@ const updateProduct = async (product) => {
 		};
 	}
 };
+const searchProductService = async (name, limit) => {
+	try {
+		console.log(limit);
+		if (!name || name === '')
+			return { EM: 'Search product by name', EC: 0, DT: [] };
+		const { count, rows } = await db.Products.findAndCountAll({
+			where: {
+				name: {
+					[Op.like]: `%${name}%`,
+				},
+			},
+			limit: limit ? limit : 10,
+		});
+		return {
+			EM: `search product success with ${count} records`,
+			EC: 0,
+			DT: rows,
+		};
+	} catch (error) {
+		console.log(error);
+		return {
+			EM: 'ERROR from server',
+			EC: -1,
+			DT: '',
+		};
+	}
+};
 module.exports = {
 	upLoadtProduct,
 	getProductService,
 	deleteProduct,
 	updateProduct,
+	searchProductService,
 };

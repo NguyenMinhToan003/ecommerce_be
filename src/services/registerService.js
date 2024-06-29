@@ -20,7 +20,7 @@ const createAccountService = async (data) => {
 	try {
 		const [user, created] = await db.Users.findOrCreate({
 			where: {
-				[Op.or]: [{ email: data.email }, { phone: +data.phone }],
+				[Op.or]: [{ email: data.email }, { phone: data.phone }],
 			},
 			defaults: {
 				name: data.name,
@@ -28,7 +28,7 @@ const createAccountService = async (data) => {
 				password: await hashPassword(data.password),
 				address: data.address,
 				groupID: data.group,
-				gender: data.gender,
+				gender: data.gender === 0 ? false : true,
 				phone: data.phone,
 				avatar: 'http://localhost:4040/assets/images/default/avatardefault.png',
 			},
@@ -112,7 +112,7 @@ const logoutService = async (idUser) => {
 	try {
 		const result = await db.Users.update(
 			{ logoutAt: new Date().getTime() },
-			{ where: { id: +idUser } }
+			{ where: { id: idUser } }
 		);
 		return {
 			EM: result ? 'Logout successfully' : 'Logout failed',

@@ -34,6 +34,7 @@ const initApiRouter = (app) => {
 	router.get('/getProduct', productionController.getProduction);
 	router.post('/deleteProduct', productionController.deleteProduction);
 	router.post('/updateProduct', productionController.updateProduction);
+	router.get('/search', productionController.searchProduction);
 	return app.use('/api/v1', router);
 };
 
