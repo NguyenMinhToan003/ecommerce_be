@@ -15,6 +15,7 @@ const nonSecurePaths = [
 	'/detailProduct',
 	'/shipping',
 	'/getOrders',
+	'/getOrderDetail',
 ];
 
 const createAccessJWT = (payload) => {

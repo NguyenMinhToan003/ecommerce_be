@@ -1,23 +1,25 @@
 import db from '../models';
 
-const addShippingService = async (data) => {
+const addOrders = async (data) => {
 	try {
 		const { userID, products } = data;
-
-		const shipping = await db.Shippings.create({
+		const order = await db.Orders.create({
 			userID: userID,
-			amount: 3,
-			shipping_address: '',
-			shipping_fee: 0,
-			shipping_phone: '123',
-			shipping_email: '',
-			shipping_status: 0,
+			amount: products.reduce(
+				(total, product) => total + product.price * product.quantity,
+				0
+			),
+			order_address: 'HCM',
+			order_fee: 0,
+			order_phone: '123',
+			order_email: '',
+			order_status: 0,
 		});
-		if (shipping.id) {
-			const orders = await db.Orders.bulkCreate(
+		if (order.id) {
+			const orders = await db.OrderDetail.bulkCreate(
 				products.map((product) => ({
-					ShippingID: shipping.id,
-					ProductID: product.id,
+					orderID: order.id,
+					productID: product.id,
 					order_quantity: product.quantity,
 					order_price: product.price,
 					order_color: product.color[0],
@@ -55,21 +57,15 @@ const addShippingService = async (data) => {
 const getOrdersService = async (limit, page) => {
 	try {
 		const offset = page ? (page - 1) * limit : 0;
-		const { count, rows } = await db.Shippings.findAndCountAll({
+		const { count, rows } = await db.Orders.findAndCountAll({
 			include: [
 				{
 					model: db.Users,
 					attributes: ['id', 'name', 'email'],
 				},
 				{
-					model: db.Orders,
-					attributes: [
-						'order_quantity',
-						'order_price',
-						'order_color',
-						'order_size',
-						'order_status',
-					],
+					model: db.OrderDetail,
+					attributes: ['quantity', 'price', 'color', 'size', 'status'],
 					include: [
 						{
 							model: db.Products,
@@ -101,7 +97,43 @@ const getOrdersService = async (limit, page) => {
 		};
 	}
 };
+const getOrderDetailService = async (orderID) => {
+	try {
+		const order = await db.Orders.findOne({
+			where: { id: orderID },
+			include: [
+				{
+					model: db.Users,
+					attributes: ['id', 'name', 'email'],
+				},
+				{
+					model: db.OrderDetail,
+					attributes: ['quantity', 'price', 'color', 'size', 'status'],
+					include: [
+						{
+							model: db.Products,
+							attributes: ['name', 'price'],
+						},
+					],
+				},
+			],
+		});
+		return {
+			EM: 'get Order Success',
+			EC: 0,
+			DT: order,
+		};
+	} catch (error) {
+		console.log(error);
+		return {
+			EM: 'ERROR from Server',
+			EC: -1,
+			DT: '',
+		};
+	}
+};
 module.exports = {
-	addShippingService,
+	addOrders,
 	getOrdersService,
+	getOrderDetailService,
 };

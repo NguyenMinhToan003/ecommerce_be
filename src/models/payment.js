@@ -9,8 +9,8 @@ module.exports = (sequelize, DataTypes) => {
 		 */
 		static associate(models) {
 			// define association here
-			Payments.belongsTo(models.Shippings, {
-				foreignKey: 'ShippingID',
+			Payments.belongsTo(models.Orders, {
+				foreignKey: 'orderID',
 			});
 		}
 	}
@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
 				defaultValue: DataTypes.UUIDV4,
 				primaryKey: true,
 			},
-			ShippingID: {
+			orderID: {
 				type: DataTypes.INTEGER,
 				references: {
 					model: 'Shippings',
