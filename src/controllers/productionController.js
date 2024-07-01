@@ -5,6 +5,7 @@ import {
 	deleteProduct,
 	updateProduct,
 	searchProductService,
+	detailProductService,
 } from '../services/productService';
 const getProduction = async (req, res) => {
 	try {
@@ -89,11 +90,26 @@ const searchProduction = async (req, res) => {
 		return res.stastus(500).json({ EM: 'ERROR from server', EC: -1, DT: '' });
 	}
 };
-
+const detailProduction = async (req, res) => {
+	try {
+		const { id } = req.query;
+		console.log(id);
+		const result = await detailProductService(id);
+		return res.status(200).json({
+			EM: result.EM,
+			EC: result.EC,
+			DT: result.DT,
+		});
+	} catch (error) {
+		console.log(error);
+		return res.stastus(500).json({ EM: 'ERROR from server', EC: -1, DT: '' });
+	}
+};
 module.exports = {
 	upLoadProduction,
 	getProduction,
 	deleteProduction,
 	updateProduction,
 	searchProduction,
+	detailProduction,
 };

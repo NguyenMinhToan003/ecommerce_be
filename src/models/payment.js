@@ -16,7 +16,18 @@ module.exports = (sequelize, DataTypes) => {
 	}
 	Payments.init(
 		{
-			ShippingID: DataTypes.INTEGER,
+			id: {
+				type: DataTypes.UUID,
+				defaultValue: DataTypes.UUIDV4,
+				primaryKey: true,
+			},
+			ShippingID: {
+				type: DataTypes.INTEGER,
+				references: {
+					model: 'Shippings',
+					key: 'id',
+				},
+			},
 			amount: DataTypes.FLOAT,
 			payment_type: DataTypes.STRING,
 			payment_status: DataTypes.STRING,

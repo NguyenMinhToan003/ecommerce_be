@@ -154,10 +154,40 @@ const searchProductService = async (name, limit, page) => {
 		};
 	}
 };
+const detailProductService = async (id) => {
+	try {
+		console.log(id);
+		const result = await db.Products.findOne({
+			where: {
+				id: id,
+			},
+			include: [
+				{
+					model: db.Users,
+					attributes: ['name'],
+				},
+			],
+		});
+
+		return {
+			EM: 'get detail product success',
+			EC: 0,
+			DT: result,
+		};
+	} catch (error) {
+		console.log(error);
+		return {
+			EM: 'ERROR from server',
+			EC: -1,
+			DT: '',
+		};
+	}
+};
 module.exports = {
 	upLoadtProduct,
 	getProductService,
 	deleteProduct,
 	updateProduct,
 	searchProductService,
+	detailProductService,
 };

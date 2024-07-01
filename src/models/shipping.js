@@ -1,33 +1,53 @@
 'use strict';
-const { Model } = require('sequelize');
-module.exports = (sequelize, DataTypes) => {
+const { Model, DataTypes } = require('sequelize');
+
+module.exports = (sequelize) => {
 	class Shippings extends Model {
-		/**
-		 * Helper method for defining associations.
-		 * This method is not a part of Sequelize lifecycle.
-		 * The `models/index` file will call this method automatically.
-		 */
 		static associate(models) {
-			// define association here
 			Shippings.belongsTo(models.Users, {
 				foreignKey: 'userID',
 			});
 		}
 	}
+
 	Shippings.init(
 		{
-			userID: DataTypes.INTEGER,
-			amount: DataTypes.FLOAT,
-			shipping_address: DataTypes.STRING,
-			shipping_fee: DataTypes.FLOAT,
-			shipping_phone: DataTypes.STRING,
-			shipping_email: DataTypes.STRING,
-			shipping_status: DataTypes.BOOLEAN,
+			id: {
+				type: DataTypes.UUID,
+				defaultValue: DataTypes.UUIDV4,
+				primaryKey: true,
+			},
+			userID: {
+				type: DataTypes.UUID,
+				references: {
+					model: 'Users',
+					key: 'id',
+				},
+			},
+			amount: {
+				type: DataTypes.FLOAT,
+			},
+			shipping_address: {
+				type: DataTypes.STRING,
+			},
+			shipping_fee: {
+				type: DataTypes.FLOAT,
+			},
+			shipping_phone: {
+				type: DataTypes.STRING,
+			},
+			shipping_email: {
+				type: DataTypes.STRING,
+			},
+			shipping_status: {
+				type: DataTypes.BOOLEAN,
+			},
 		},
 		{
 			sequelize,
 			modelName: 'Shippings',
 		}
 	);
+
 	return Shippings;
 };
