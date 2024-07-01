@@ -25,11 +25,18 @@ const addShippingService = async (data) => {
 					order_status: 0,
 				}))
 			);
-			return {
-				EM: 'Order Success !',
-				EC: 0,
-				DT: '',
-			};
+			if (orders)
+				return {
+					EM: 'Order Success !',
+					EC: 0,
+					DT: '',
+				};
+			else
+				return {
+					EM: 'ERROR from db',
+					EC: -1,
+					DT: '',
+				};
 		} else
 			return {
 				EM: 'ERROR from db',
@@ -45,7 +52,56 @@ const addShippingService = async (data) => {
 		};
 	}
 };
-
+const getOrdersService = async (limit, page) => {
+	try {
+		const offset = page ? (page - 1) * limit : 0;
+		const { count, rows } = await db.Shippings.findAndCountAll({
+			include: [
+				{
+					model: db.Users,
+					attributes: ['id', 'name', 'email'],
+				},
+				{
+					model: db.Orders,
+					attributes: [
+						'order_quantity',
+						'order_price',
+						'order_color',
+						'order_size',
+						'order_status',
+					],
+					include: [
+						{
+							model: db.Products,
+							attributes: ['name', 'price'],
+						},
+					],
+				},
+			],
+			limit: +limit,
+			offset: offset,
+			order: [['createdAt', 'DESC']],
+		});
+		let data = {
+			totalRows: count,
+			listShipping: rows,
+			totalPage: Math.ceil(count / limit),
+		};
+		return {
+			EM: 'get List Shipping Success',
+			EC: 0,
+			DT: data,
+		};
+	} catch (error) {
+		console.log(error);
+		return {
+			EM: 'ERROR from Server',
+			EC: -1,
+			DT: '',
+		};
+	}
+};
 module.exports = {
 	addShippingService,
+	getOrdersService,
 };

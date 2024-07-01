@@ -6,6 +6,9 @@ module.exports = (sequelize) => {
 			Orders.belongsTo(models.Shippings, {
 				foreignKey: 'ShippingID',
 			});
+			Orders.belongsTo(models.Products, {
+				foreignKey: 'ProductID',
+			});
 		}
 	}
 

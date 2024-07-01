@@ -1,4 +1,3 @@
-'use strict';
 const { Model, DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
@@ -6,6 +5,9 @@ module.exports = (sequelize) => {
 		static associate(models) {
 			Shippings.belongsTo(models.Users, {
 				foreignKey: 'userID',
+			});
+			Shippings.hasMany(models.Orders, {
+				foreignKey: 'ShippingID',
 			});
 		}
 	}
@@ -24,24 +26,12 @@ module.exports = (sequelize) => {
 					key: 'id',
 				},
 			},
-			amount: {
-				type: DataTypes.FLOAT,
-			},
-			shipping_address: {
-				type: DataTypes.STRING,
-			},
-			shipping_fee: {
-				type: DataTypes.FLOAT,
-			},
-			shipping_phone: {
-				type: DataTypes.STRING,
-			},
-			shipping_email: {
-				type: DataTypes.STRING,
-			},
-			shipping_status: {
-				type: DataTypes.BOOLEAN,
-			},
+			amount: DataTypes.FLOAT,
+			shipping_address: DataTypes.STRING,
+			shipping_fee: DataTypes.FLOAT,
+			shipping_phone: DataTypes.STRING,
+			shipping_email: DataTypes.STRING,
+			shipping_status: DataTypes.BOOLEAN,
 		},
 		{
 			sequelize,

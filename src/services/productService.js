@@ -12,7 +12,7 @@ const getProductService = async ({ limit, page }) => {
 			],
 			limit: +limit,
 			offset: offset,
-			order: [['id', 'DESC']],
+			order: [['createdAt', 'DESC']],
 		});
 		let totalPage = Math.ceil(count / limit);
 		const data = {

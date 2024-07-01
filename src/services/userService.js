@@ -7,7 +7,7 @@ const getListUserServices = async (page, limit) => {
 			include: [{ model: db.Groups, attributes: ['name'] }],
 			offset: +offset,
 			limit: +limit,
-			order: [['id', 'DESC']],
+			order: [['createdAt', 'DESC']],
 		});
 		let data = {
 			totalRows: count,

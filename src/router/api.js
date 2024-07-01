@@ -38,6 +38,7 @@ const initApiRouter = (app) => {
 	router.post('/updateProduct', productionController.updateProduction);
 	router.get('/search', productionController.searchProduction);
 	router.post('/shipping', shippingController.addShipping);
+	router.get('/getOrders', shippingController.getOrders);
 	return app.use('/api/v1', router);
 };
 
