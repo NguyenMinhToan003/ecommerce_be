@@ -28,9 +28,6 @@ module.exports = {
 			price: {
 				type: Sequelize.FLOAT,
 			},
-			date: {
-				type: Sequelize.DATE,
-			},
 			color: {
 				type: Sequelize.STRING,
 			},

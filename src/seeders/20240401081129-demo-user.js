@@ -7,8 +7,8 @@ module.exports = {
 			'Groups',
 			[
 				{
-					name: 'Leader',
-					description: 'Leader',
+					name: 'Admin',
+					description: 'Admin',
 				},
 				{
 					name: 'Dev',

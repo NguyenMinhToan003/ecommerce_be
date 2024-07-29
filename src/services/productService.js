@@ -58,23 +58,29 @@ const deleteProduct = async (id) => {
 const upLoadtProduct = async (product) => {
 	try {
 		console.log('>>>>>>> product ', product);
-		const result = await db.Products.create({
-			name: product.name,
-			price: product.price == -1 ? 0 : +product.price,
-			image: product.url,
-			detail: product.detail,
-			userID: product.userID,
-			star: 5,
-			size: product.size,
-			color: '#000000',
-			quantity: 9999,
-		});
+		const t = await db.sequelize.transaction();
+		const result = await db.Products.create(
+			{
+				name: product.name,
+				price: product.price == -1 ? 0 : +product.price,
+				image: product.url,
+				detail: product.detail,
+				userID: product.userID,
+				star: 5,
+				size: product.size,
+				color: product.color || '#000000',
+				quantity: 9999,
+			},
+			{ transaction: t }
+		);
+		await t.commit();
 		return {
 			EM: 'upload product success',
 			EC: 0,
 			DT: result,
 		};
 	} catch (error) {
+		await t.rollback();
 		console.log(error);
 		return {
 			EM: 'ERROR from server',
@@ -85,6 +91,7 @@ const upLoadtProduct = async (product) => {
 };
 const updateProduct = async (product) => {
 	try {
+		const t = await db.sequelize.transaction();
 		const result = await db.Products.update(
 			{
 				name: product.name,
@@ -97,18 +104,21 @@ const updateProduct = async (product) => {
 				color: '#000000',
 				quantity: 9999,
 			},
+			{ transaction: t },
 			{
 				where: {
 					id: product.id,
 				},
 			}
 		);
+		await t.commit();
 		return {
 			EM: 'update product success',
 			EC: 0,
 			DT: result,
 		};
 	} catch (error) {
+		await t.rollback();
 		console.log(error);
 		return {
 			EM: 'ERROR from server',

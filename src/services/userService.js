@@ -29,5 +29,22 @@ const getListUserServices = async (page, limit) => {
 		};
 	}
 };
+const getDataUser = async (id) => {
+	try {
+		const result = await db.Users.findOne({ where: { id: id }, raw: true });
+		return {
+			EM: 'GET User',
+			EC: 0,
+			DT: result,
+		};
+	} catch (error) {
+		console.log(error);
+		return {
+			EM: 'ERROR from server',
+			EC: -1,
+			DT: '',
+		};
+	}
+};
 
-module.exports = { getListUserServices };
+module.exports = { getListUserServices, getDataUser };

@@ -1,52 +1,65 @@
 import db from '../models';
 
 const addOrders = async (data) => {
+	const t = await db.sequelize.transaction();
 	try {
 		const { userID, products } = data;
-		const order = await db.Orders.create({
-			userID: userID,
-			amount: products.reduce(
-				(total, product) => total + product.price * product.quantity,
-				0
-			),
-			order_address: 'HCM',
-			order_fee: 0,
-			order_phone: '123',
-			order_email: '',
-			order_status: 0,
-		});
-		if (order.id) {
-			const orders = await db.OrderDetail.bulkCreate(
+		const order = await db.Orders.create(
+			{
+				userID: userID,
+				amount: products.reduce(
+					(total, product) => total + product.price * product.quantity,
+					0
+				),
+				order_address: 'HCM',
+				order_fee: 0,
+				order_phone: '123',
+				order_email: '',
+				order_status: 0,
+			},
+			{ transaction: t }
+		);
+
+		if (order && order.id) {
+			const orderDetail = await db.OrderDetail.bulkCreate(
 				products.map((product) => ({
 					orderID: order.id,
 					productID: product.id,
-					order_quantity: product.quantity,
-					order_price: product.price,
-					order_color: product.color[0],
-					order_size: product.size[0],
-					order_status: 0,
-				}))
+					quantity: product.quantity,
+					price: product.price,
+					color: product.color,
+					size: product.size,
+					status: 0,
+				})),
+				{ transaction: t }
 			);
-			if (orders)
+
+			if (orderDetail) {
+				await t.commit();
 				return {
 					EM: 'Order Success !',
 					EC: 0,
-					DT: '',
+					DT: order,
 				};
-			else
+			} else {
+				await t.rollback();
 				return {
-					EM: 'ERROR from db',
+					EM: 'Error from DB',
 					EC: -1,
 					DT: '',
 				};
-		} else
+			}
+		} else {
+			await t.rollback();
 			return {
-				EM: 'ERROR from db',
+				EM: 'Error from DB',
 				EC: -1,
 				DT: '',
 			};
+		}
 	} catch (error) {
-		console.log(error);
+		await t.rollback();
+		console.error('Transaction error:', error);
 		return {
 			EM: 'ERROR from Server',
 			EC: -1,
@@ -54,6 +67,7 @@ const addOrders = async (data) => {
 		};
 	}
 };
+
 const getOrdersService = async (limit, page) => {
 	try {
 		const offset = page ? (page - 1) * limit : 0;
@@ -78,18 +92,19 @@ const getOrdersService = async (limit, page) => {
 			offset: offset,
 			order: [['createdAt', 'DESC']],
 		});
-		let data = {
+
+		const data = {
 			totalRows: count,
 			listShipping: rows,
 			totalPage: Math.ceil(count / limit),
 		};
 		return {
-			EM: 'get List Shipping Success',
+			EM: 'Get List Shipping Success',
 			EC: 0,
 			DT: data,
 		};
 	} catch (error) {
-		console.log(error);
+		console.error('Error fetching orders:', error);
 		return {
 			EM: 'ERROR from Server',
 			EC: -1,
@@ -97,6 +112,7 @@ const getOrdersService = async (limit, page) => {
 		};
 	}
 };
+
 const getOrderDetailService = async (orderID) => {
 	try {
 		const order = await db.Orders.findOne({
@@ -118,13 +134,22 @@ const getOrderDetailService = async (orderID) => {
 				},
 			],
 		});
-		return {
-			EM: 'get Order Success',
-			EC: 0,
-			DT: order,
-		};
+
+		if (order) {
+			return {
+				EM: 'Get Order Success',
+				EC: 0,
+				DT: order,
+			};
+		} else {
+			return {
+				EM: 'Order not found',
+				EC: -1,
+				DT: '',
+			};
+		}
 	} catch (error) {
-		console.log(error);
+		console.error('Error fetching order details:', error);
 		return {
 			EM: 'ERROR from Server',
 			EC: -1,
@@ -132,6 +157,7 @@ const getOrderDetailService = async (orderID) => {
 		};
 	}
 };
+
 module.exports = {
 	addOrders,
 	getOrdersService,
