@@ -4,6 +4,7 @@ import productionController from '../controllers/productionController.js';
 import jwtController from '../controllers/jwtController.js';
 import userController from '../controllers/userController.js';
 import ordersController from '../controllers/ordersController.js';
+import categoryController from '../controllers/categoryController.js';
 import {
 	storeImageProduct,
 	storeImageUser,
@@ -40,6 +41,8 @@ const initApiRouter = (app) => {
 	router.post('/shipping', ordersController.addShipping);
 	router.get('/getOrders', ordersController.getOrders);
 	router.get('/getOrderDetail', ordersController.getOrderDetail);
+	router.get('/getCatagories', categoryController.getCatagories);
+	router.get('/getProductByCatagory', categoryController.getProductByCatagory);
 	return app.use('/api/v1', router);
 };
 

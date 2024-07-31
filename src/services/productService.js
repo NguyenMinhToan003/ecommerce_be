@@ -70,6 +70,7 @@ const upLoadtProduct = async (product) => {
 				size: product.size,
 				color: product.color || '#000000',
 				quantity: 9999,
+				categoryID: product.category,
 			},
 			{ transaction: t }
 		);

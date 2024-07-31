@@ -13,8 +13,8 @@ module.exports = (sequelize, DataTypes) => {
 			Products.belongsTo(models.Users, {
 				foreignKey: 'userID',
 			});
-			Products.belongsTo(models.Catagories, {
-				foreignKey: 'catagoryID',
+			Products.belongsTo(models.Categories, {
+				foreignKey: 'categoryID',
 			});
 			Products.hasMany(models.OrderDetail, {
 				foreignKey: 'productID',
@@ -38,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
 			image: DataTypes.STRING(1000),
 			countDown: DataTypes.FLOAT,
 			userID: DataTypes.UUID,
-			catagoryID: DataTypes.INTEGER,
+			categoryID: DataTypes.INTEGER,
 		},
 		{
 			sequelize,

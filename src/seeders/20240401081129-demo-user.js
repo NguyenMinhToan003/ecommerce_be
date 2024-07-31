@@ -26,6 +26,20 @@ module.exports = {
 			{}
 		);
 
+		await queryInterface.bulkInsert('Categories', [
+			{
+				name: 'Thiết bị điện tử',
+				description: 'Thiết bị điện tử',
+			},
+			{
+				name: 'Thời trang',
+				description: 'Thời trang',
+			},
+			{
+				name: 'Đồ gia dụng',
+				description: 'Đồ gia dụng',
+			},
+		]);
 		// Adjusted seed data for Users
 		await queryInterface.bulkInsert(
 			'Users',
