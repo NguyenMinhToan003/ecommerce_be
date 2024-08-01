@@ -19,7 +19,6 @@ const getCatagories = async (req, res) => {
 const getProductByCatagory = async (req, res) => {
 	try {
 		let id = req.query.id || req.params.id || req.body.id;
-
 		const result = await catagoryServices.getProductByCatagory(id);
 		return res.status(200).json({
 			EM: result.EM,

@@ -33,6 +33,9 @@ const initApiRouter = (app) => {
 		productionController.upLoadProduction
 	);
 	router.get('/getListUser', userController.getListUser);
+	router.post('/getDataUser', userController.getUser);
+	router.post('/updateDataUser', userController.updateUser);
+	router.delete('/deleteUser', userController.deleteUser);
 	router.get('/detailProduct', productionController.detailProduction);
 	router.get('/getProduct', productionController.getProduction);
 	router.post('/deleteProduct', productionController.deleteProduction);
