@@ -13,13 +13,21 @@ module.exports = (sequelize, DataTypes) => {
 			Products.belongsTo(models.Users, {
 				foreignKey: 'userID',
 			});
-			Products.belongsTo(models.Catagories, {
-				foreignKey: 'catagoryID',
+			Products.belongsTo(models.Categories, {
+				foreignKey: 'categoryID',
+			});
+			Products.hasMany(models.OrderDetail, {
+				foreignKey: 'productID',
 			});
 		}
 	}
 	Products.init(
 		{
+			id: {
+				type: DataTypes.UUID,
+				defaultValue: DataTypes.UUIDV4,
+				primaryKey: true,
+			},
 			name: DataTypes.STRING,
 			star: DataTypes.FLOAT,
 			price: DataTypes.FLOAT,
@@ -30,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
 			image: DataTypes.STRING(1000),
 			countDown: DataTypes.FLOAT,
 			userID: DataTypes.UUID,
-			catagoryID: DataTypes.INTEGER,
+			categoryID: DataTypes.INTEGER,
 		},
 		{
 			sequelize,

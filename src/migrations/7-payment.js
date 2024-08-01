@@ -8,10 +8,10 @@ module.exports = {
 				allowNull: false,
 				primaryKey: true,
 			},
-			ShippingID: {
+			orderID: {
 				type: Sequelize.UUID,
 				references: {
-					model: 'Shippings',
+					model: 'Orders',
 					key: 'id',
 				},
 			},

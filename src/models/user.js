@@ -15,10 +15,18 @@ module.exports = (sequelize, DataTypes) => {
 			Users.hasMany(models.Products, {
 				foreignKey: 'userID',
 			});
+			Users.hasMany(models.Orders, {
+				foreignKey: 'userID',
+			});
 		}
 	}
 	Users.init(
 		{
+			id: {
+				type: DataTypes.UUID,
+				defaultValue: DataTypes.UUIDV4,
+				primaryKey: true,
+			},
 			name: DataTypes.STRING,
 			email: DataTypes.STRING,
 			address: DataTypes.STRING,

@@ -1,43 +1,40 @@
 'use strict';
 module.exports = {
 	up: async (queryInterface, Sequelize) => {
-		await queryInterface.createTable('Orders', {
+		await queryInterface.createTable('OrderDetail', {
 			id: {
 				type: Sequelize.UUID,
 				defaultValue: Sequelize.fn('UUID'),
 				allowNull: false,
 				primaryKey: true,
 			},
-			ShippingID: {
+			orderID: {
 				type: Sequelize.UUID,
 				references: {
-					model: 'Shippings',
+					model: 'Orders',
 					key: 'id',
 				},
 			},
-			ProductID: {
+			productID: {
 				type: Sequelize.UUID,
 				references: {
 					model: 'Products',
 					key: 'id',
 				},
 			},
-			order_quantity: {
+			quantity: {
 				type: Sequelize.INTEGER,
 			},
-			order_price: {
+			price: {
 				type: Sequelize.FLOAT,
 			},
-			order_date: {
-				type: Sequelize.DATE,
-			},
-			order_color: {
+			color: {
 				type: Sequelize.STRING,
 			},
-			order_size: {
+			size: {
 				type: Sequelize.STRING,
 			},
-			order_status: {
+			status: {
 				type: Sequelize.BOOLEAN,
 			},
 			createdAt: {
@@ -51,6 +48,6 @@ module.exports = {
 		});
 	},
 	down: async (queryInterface, Sequelize) => {
-		await queryInterface.dropTable('Orders');
+		await queryInterface.dropTable('OrderDetail');
 	},
 };

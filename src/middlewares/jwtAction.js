@@ -1,6 +1,7 @@
 require('dotenv').config();
 import jwt from 'jsonwebtoken';
-
+import db from '../models';
+import { getGroupWithRoleUser } from '../services/jwtService';
 const nonSecurePaths = [
 	'/login',
 	'/signup',
@@ -11,6 +12,15 @@ const nonSecurePaths = [
 	'/getProduct',
 	'/refreshToken',
 	'/search',
+	'/detailProduct',
+	'/shipping',
+	'/getOrders',
+	'/getOrderDetail',
+	'/getCatagories',
+	'/getProductByCatagory',
+	'/getDataUser',
+	'/updateDataUser',
+	'/deleteUser',
 ];
 
 const createAccessJWT = (payload) => {
@@ -59,25 +69,28 @@ const verifyRefreshJWT = (token) => {
 	return decoded;
 };
 
-const refreshToken = (req, res, next) => {
+const refreshToken = async (req, res, next) => {
 	const refreshTokenCur = req.cookies.refreshToken;
 
 	if (refreshTokenCur) {
 		let decoded = verifyRefreshJWT(refreshTokenCur);
 
 		if (decoded) {
+			let data = await db.Users.findOne({
+				where: { id: decoded.id },
+			});
+			const group = await getGroupWithRoleUser(data.groupID);
 			let user = {
-				id: decoded.id,
-				name: decoded.name,
-				email: decoded.email,
-				phone: decoded.phone,
-				address: decoded.address,
-				avatar: decoded.avatar,
-				group: decoded.group,
+				id: data.id,
+				name: data.name,
+				email: data.email,
+				phone: data.phone,
+				address: data.address,
+				avatar: data.avatar,
+				group: group,
 			};
 			user.iat = Math.floor(Date.now() / 1000);
-			let refreshToken = createRefreshJWT(user);
-
+			let refreshToken = createRefreshJWT({ id: user.id });
 			let accessJWT = createAccessJWT(user);
 			req.token = accessJWT;
 			req.user = user;

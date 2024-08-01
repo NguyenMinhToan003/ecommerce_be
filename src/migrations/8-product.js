@@ -30,7 +30,7 @@ module.exports = {
 				type: Sequelize.STRING,
 			},
 			image: {
-				type: Sequelize.STRING,
+				type: Sequelize.STRING(1000),
 			},
 			countDown: {
 				type: Sequelize.FLOAT,
@@ -42,7 +42,7 @@ module.exports = {
 					key: 'id',
 				},
 			},
-			catagoryID: {
+			categoryID: {
 				type: Sequelize.INTEGER,
 				references: {
 					model: 'Categories',

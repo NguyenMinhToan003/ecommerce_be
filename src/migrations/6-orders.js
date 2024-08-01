@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
 	up: async (queryInterface, Sequelize) => {
-		await queryInterface.createTable('Shippings', {
+		await queryInterface.createTable('Orders', {
 			id: {
 				type: Sequelize.UUID,
 				defaultValue: Sequelize.fn('UUID'),
@@ -18,19 +18,19 @@ module.exports = {
 			amount: {
 				type: Sequelize.FLOAT,
 			},
-			shipping_address: {
+			order_address: {
 				type: Sequelize.STRING,
 			},
-			shipping_fee: {
+			order_fee: {
 				type: Sequelize.FLOAT,
 			},
-			shipping_phone: {
+			order_phone: {
 				type: Sequelize.STRING,
 			},
-			shipping_email: {
+			order_email: {
 				type: Sequelize.STRING,
 			},
-			shipping_status: {
+			order_status: {
 				type: Sequelize.BOOLEAN,
 			},
 			createdAt: {
@@ -44,6 +44,6 @@ module.exports = {
 		});
 	},
 	down: async (queryInterface, Sequelize) => {
-		await queryInterface.dropTable('Shippings');
+		await queryInterface.dropTable('Orders');
 	},
 };

@@ -9,14 +9,25 @@ module.exports = (sequelize, DataTypes) => {
 		 */
 		static associate(models) {
 			// define association here
-			Payments.belongsTo(models.Shippings, {
-				foreignKey: 'ShippingID',
+			Payments.belongsTo(models.Orders, {
+				foreignKey: 'orderID',
 			});
 		}
 	}
 	Payments.init(
 		{
-			ShippingID: DataTypes.INTEGER,
+			id: {
+				type: DataTypes.UUID,
+				defaultValue: DataTypes.UUIDV4,
+				primaryKey: true,
+			},
+			orderID: {
+				type: DataTypes.INTEGER,
+				references: {
+					model: 'Shippings',
+					key: 'id',
+				},
+			},
 			amount: DataTypes.FLOAT,
 			payment_type: DataTypes.STRING,
 			payment_status: DataTypes.STRING,

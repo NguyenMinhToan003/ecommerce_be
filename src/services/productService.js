@@ -12,7 +12,7 @@ const getProductService = async ({ limit, page }) => {
 			],
 			limit: +limit,
 			offset: offset,
-			order: [['id', 'DESC']],
+			order: [['createdAt', 'DESC']],
 		});
 		let totalPage = Math.ceil(count / limit);
 		const data = {
@@ -58,23 +58,30 @@ const deleteProduct = async (id) => {
 const upLoadtProduct = async (product) => {
 	try {
 		console.log('>>>>>>> product ', product);
-		const result = await db.Products.create({
-			name: product.name,
-			price: product.price == -1 ? 0 : +product.price,
-			image: product.url,
-			detail: product.detail,
-			userID: product.userID,
-			star: 5,
-			size: product.size,
-			color: '#000000',
-			quantity: 9999,
-		});
+		const t = await db.sequelize.transaction();
+		const result = await db.Products.create(
+			{
+				name: product.name,
+				price: product.price == -1 ? 0 : +product.price,
+				image: product.url,
+				detail: product.detail,
+				userID: product.userID,
+				star: 5,
+				size: product.size,
+				color: product.color || '#000000',
+				quantity: 9999,
+				categoryID: product.category,
+			},
+			{ transaction: t }
+		);
+		await t.commit();
 		return {
 			EM: 'upload product success',
 			EC: 0,
 			DT: result,
 		};
 	} catch (error) {
+		await t.rollback();
 		console.log(error);
 		return {
 			EM: 'ERROR from server',
@@ -85,6 +92,7 @@ const upLoadtProduct = async (product) => {
 };
 const updateProduct = async (product) => {
 	try {
+		const t = await db.sequelize.transaction();
 		const result = await db.Products.update(
 			{
 				name: product.name,
@@ -97,16 +105,56 @@ const updateProduct = async (product) => {
 				color: '#000000',
 				quantity: 9999,
 			},
+			{ transaction: t },
 			{
 				where: {
 					id: product.id,
 				},
 			}
 		);
+		await t.commit();
 		return {
 			EM: 'update product success',
 			EC: 0,
 			DT: result,
+		};
+	} catch (error) {
+		await t.rollback();
+		console.log(error);
+		return {
+			EM: 'ERROR from server',
+			EC: -1,
+			DT: '',
+		};
+	}
+};
+const searchProductService = async (name, limit, page) => {
+	try {
+		let offset = (page - 1) * limit;
+		console.log(limit, page);
+		if (!name || name === '')
+			return { EM: 'Search product by name', EC: 0, DT: [] };
+		const { count, rows } = await db.Products.findAndCountAll({
+			where: {
+				name: {
+					[Op.like]: `%${name}%`,
+				},
+			},
+			include: [
+				{
+					model: db.Users,
+					attributes: ['name'],
+				},
+			],
+			offset: +offset,
+			limit: limit ? +limit : 10,
+			order: [['id', 'DESC']],
+		});
+
+		return {
+			EM: `search product success with ${count} records`,
+			EC: 0,
+			DT: rows,
 		};
 	} catch (error) {
 		console.log(error);
@@ -117,23 +165,25 @@ const updateProduct = async (product) => {
 		};
 	}
 };
-const searchProductService = async (name, limit) => {
+const detailProductService = async (id) => {
 	try {
-		console.log(limit);
-		if (!name || name === '')
-			return { EM: 'Search product by name', EC: 0, DT: [] };
-		const { count, rows } = await db.Products.findAndCountAll({
+		console.log(id);
+		const result = await db.Products.findOne({
 			where: {
-				name: {
-					[Op.like]: `%${name}%`,
-				},
+				id: id,
 			},
-			limit: limit ? limit : 10,
+			include: [
+				{
+					model: db.Users,
+					attributes: ['name'],
+				},
+			],
 		});
+
 		return {
-			EM: `search product success with ${count} records`,
+			EM: 'get detail product success',
 			EC: 0,
-			DT: rows,
+			DT: result,
 		};
 	} catch (error) {
 		console.log(error);
@@ -150,4 +200,5 @@ module.exports = {
 	deleteProduct,
 	updateProduct,
 	searchProductService,
+	detailProductService,
 };

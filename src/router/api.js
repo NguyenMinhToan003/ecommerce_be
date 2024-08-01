@@ -3,6 +3,8 @@ import registerController from '../controllers/registerController.js';
 import productionController from '../controllers/productionController.js';
 import jwtController from '../controllers/jwtController.js';
 import userController from '../controllers/userController.js';
+import ordersController from '../controllers/ordersController.js';
+import categoryController from '../controllers/categoryController.js';
 import {
 	storeImageProduct,
 	storeImageUser,
@@ -31,10 +33,19 @@ const initApiRouter = (app) => {
 		productionController.upLoadProduction
 	);
 	router.get('/getListUser', userController.getListUser);
+	router.post('/getDataUser', userController.getUser);
+	router.post('/updateDataUser', userController.updateUser);
+	router.delete('/deleteUser', userController.deleteUser);
+	router.get('/detailProduct', productionController.detailProduction);
 	router.get('/getProduct', productionController.getProduction);
 	router.post('/deleteProduct', productionController.deleteProduction);
 	router.post('/updateProduct', productionController.updateProduction);
 	router.get('/search', productionController.searchProduction);
+	router.post('/shipping', ordersController.addShipping);
+	router.get('/getOrders', ordersController.getOrders);
+	router.get('/getOrderDetail', ordersController.getOrderDetail);
+	router.get('/getCatagories', categoryController.getCatagories);
+	router.get('/getProductByCatagory', categoryController.getProductByCatagory);
 	return app.use('/api/v1', router);
 };
 

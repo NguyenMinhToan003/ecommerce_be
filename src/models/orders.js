@@ -1,28 +1,36 @@
-'use strict';
-const { Model } = require('sequelize');
-module.exports = (sequelize, DataTypes) => {
+const { Model, DataTypes } = require('sequelize');
+
+module.exports = (sequelize) => {
 	class Orders extends Model {
-		/**
-		 * Helper method for defining associations.
-		 * This method is not a part of Sequelize lifecycle.
-		 * The `models/index` file will call this method automatically.
-		 */
 		static associate(models) {
-			// define association here
-			Orders.belongsTo(models.Shippings, {
-				foreignKey: 'ShippingID',
+			Orders.belongsTo(models.Users, {
+				foreignKey: 'userID',
+			});
+			Orders.hasMany(models.OrderDetail, {
+				foreignKey: 'orderID',
 			});
 		}
 	}
+
 	Orders.init(
 		{
-			ShippingID: DataTypes.UUID,
-			ProductID: DataTypes.UUID,
-			order_quantity: DataTypes.INTEGER,
-			order_price: DataTypes.FLOAT,
-			order_date: DataTypes.DATE,
-			order_color: DataTypes.STRING,
-			order_size: DataTypes.STRING,
+			id: {
+				type: DataTypes.UUID,
+				defaultValue: DataTypes.UUIDV4,
+				primaryKey: true,
+			},
+			userID: {
+				type: DataTypes.UUID,
+				references: {
+					model: 'Users',
+					key: 'id',
+				},
+			},
+			amount: DataTypes.FLOAT,
+			order_address: DataTypes.STRING,
+			order_fee: DataTypes.FLOAT,
+			order_phone: DataTypes.STRING,
+			order_email: DataTypes.STRING,
 			order_status: DataTypes.BOOLEAN,
 		},
 		{
@@ -30,5 +38,6 @@ module.exports = (sequelize, DataTypes) => {
 			modelName: 'Orders',
 		}
 	);
+
 	return Orders;
 };

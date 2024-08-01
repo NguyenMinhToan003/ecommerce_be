@@ -76,7 +76,7 @@ const loginService = async (account, password) => {
 					group: group,
 				};
 				const token = createAccessJWT(dataUser);
-				const refreshtoken = createRefreshJWT(dataUser);
+				const refreshtoken = createRefreshJWT({ id: dataUser.id });
 				return {
 					EM: 'Login successful',
 					EC: 0,
@@ -130,16 +130,20 @@ const logoutService = async (idUser) => {
 };
 const updateAvatarService = async (id, urlImage) => {
 	try {
+		const t = await db.sequelize.transaction();
 		const result = await db.Users.update(
 			{ avatar: urlImage },
-			{ where: { id: +id } }
+			{ where: { id: +id } },
+			{ transaction: t }
 		);
+		await t.commit();
 		return {
 			EM: result ? 'Update avatar successfully' : 'Update avatar failed',
 			EC: result ? 0 : 1,
 			DT: '',
 		};
 	} catch (err) {
+		await t.rollback();
 		console.log(err);
 		return res.status(500).json({
 			EM: 'ERROR from server',
