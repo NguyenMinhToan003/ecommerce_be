@@ -21,6 +21,7 @@ module.exports = (sequelize) => {
 			},
 			orderID: {
 				type: DataTypes.UUID,
+				defaultValue: DataTypes.UUIDV4,
 				references: {
 					model: 'Shippings',
 					key: 'id',
@@ -28,6 +29,7 @@ module.exports = (sequelize) => {
 			},
 			productID: {
 				type: DataTypes.UUID,
+				defaultValue: DataTypes.UUIDV4,
 				references: {
 					model: 'Products',
 					key: 'id',

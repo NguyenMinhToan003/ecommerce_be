@@ -41,6 +41,7 @@ module.exports = {
 			},
 		]);
 		// Adjusted seed data for Users
+
 		await queryInterface.bulkInsert(
 			'Users',
 			[
@@ -75,7 +76,6 @@ module.exports = {
 			],
 			{}
 		);
-
 		// Adding data to 'roles' table
 		await queryInterface.bulkInsert(
 			'Roles',
