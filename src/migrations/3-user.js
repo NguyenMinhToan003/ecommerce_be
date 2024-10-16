@@ -4,10 +4,11 @@ module.exports = {
 		await queryInterface.createTable('Users', {
 			id: {
 				type: Sequelize.UUID,
-				defaultValue: Sequelize.fn('UUID'),
+				defaultValue: Sequelize.UUIDV4,
 				allowNull: false,
 				primaryKey: true,
 			},
+
 			name: {
 				type: Sequelize.STRING,
 			},
